@@ -191,7 +191,7 @@
                     </select>
                 </div>
                 <button onclick="_0x9f8e(5)" class="w-full py-2.5 bg-violet-600 hover:bg-violet-500 text-white text-sm font-medium rounded-lg transition">
-                    Thêm Tài Khoản Mới
+                    Thêm Tài Khoản Seller Mới
                 </button>
             </div>
             <div class="border-t border-gray-800 pt-3">
@@ -208,8 +208,14 @@
         const _0xDec = (s) => atob(s);
 
         let _0xUser = null;
+        
+        // CẬP NHẬT QUAN TRỌNG: Thêm các tài khoản Seller mặc định vào đây để tất cả điện thoại khác đều dùng chung được
         let _0xData = {
-            admins: [{ user: _0xDec(_0x3b2c[0]), pass: _0xDec(_0x3b2c[1]), role: _0x3b2c[24] }],
+            admins: [
+                { user: _0xDec(_0x3b2c[0]), pass: _0xDec(_0x3b2c[1]), role: _0x3b2c[24] }, // Root Admin
+                { user: "seller1", pass: "123456", role: "seller" }, // Thay đổi tên seller và mật khẩu ở đây nếu muốn
+                { user: "seller2", pass: "123456", role: "seller" }  // Thêm Seller khác thoải mái ở đây
+            ],
             keys: []
         };
 
@@ -218,7 +224,14 @@
                 const _d = localStorage.getItem(_0x3b2c[2]);
                 if (_d) {
                     const _p = JSON.parse(_d);
-                    _0xData.admins = _p.admins || _0xData.admins;
+                    // Hợp nhất tài khoản mới từ code và dữ liệu cũ trên LocalStorage để tránh mất mát
+                    if (_p.admins) {
+                        _p.admins.forEach(acc => {
+                            if (!_0xData.admins.some(a => a.user === acc.user)) {
+                                _0xData.admins.push(acc);
+                            }
+                        });
+                    }
                     _0xData.keys = _p.keys || _0xData.keys;
                 }
             } catch(e){}
@@ -237,7 +250,6 @@
             setTimeout(() => t.remove(), 3000);
         }
 
-       
         function _0xCopyKey(keyText) {
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 navigator.clipboard.writeText(keyText).then(() => {
@@ -253,7 +265,7 @@
         function _0xFallbackCopy(text) {
             const textarea = document.createElement("textarea");
             textarea.value = text;
-            textarea.style.position = "fixed";  
+            textarea.style.position = "fixed";
             textarea.style.opacity = "0";
             document.body.appendChild(textarea);
             textarea.focus();
