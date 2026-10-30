@@ -1,0 +1,627 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a0e1a">
+<title>vGiau Store - RANDOM TEAM</title>
+<style>
+:root{
+    --bg:#0a0e1a;
+    --card:#131a2e;
+    --panel:#0e1527;
+    --line:#263653;
+    --text:#edf4ff;
+    --muted:#91a0bd;
+    --cyan:#00eaff;
+    --purple:#8d5cff;
+    --red:#ff496c;
+    --green:#36f0a0;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{width:100%;min-height:100%;scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+    margin:0;
+    padding:clamp(8px,2.5vw,24px);
+    width:100%;
+    min-width:0;
+    min-height:100vh;
+    overflow-x:hidden;
+    background:radial-gradient(ellipse at top,#182445 0%,transparent 55%),var(--bg);
+    color:var(--text);
+    font-family:Arial,Helvetica,sans-serif;
+    font-size:16px;
+    line-height:1.5;
+}
+button,input,textarea,select{font:inherit;max-width:100%}
+button{cursor:pointer;touch-action:manipulation}
+.app{width:100%;max-width:1100px;min-width:0;margin:0 auto}
+header{text-align:center;padding:clamp(14px,4vw,28px) 0}
+.logo{
+    color:var(--cyan);
+    font-size:clamp(25px,5vw,42px);
+    font-weight:900;
+    letter-spacing:clamp(1px,.4vw,3px);
+    overflow-wrap:anywhere;
+    text-shadow:0 0 22px #00eaff55;
+}
+.subtitle{margin-top:8px;color:var(--muted);font-size:clamp(11px,2vw,14px)}
+.layout{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(10px,2vw,18px);width:100%}
+.card{
+    width:100%;min-width:0;
+    padding:clamp(13px,2.5vw,22px);
+    margin:0 0 clamp(10px,2vw,18px);
+    border:1px solid var(--line);
+    border-radius:16px;
+    background:linear-gradient(145deg,#161f35,#101729);
+    box-shadow:0 12px 35px #0002;
+}
+.full{grid-column:1/-1}
+.heading{margin-bottom:16px;color:var(--cyan);font-size:clamp(13px,2vw,15px);font-weight:900;letter-spacing:.6px;overflow-wrap:anywhere}
+.label{display:block;margin:14px 0 8px;color:#c5d1e8;font-size:13px}
+input,textarea,select{
+    display:block;width:100%;min-width:0;padding:13px;
+    border:1px solid #30405f;border-radius:10px;
+    outline:none;background:var(--panel);color:var(--text);font-size:16px;
+}
+input:focus,textarea:focus,select:focus{border-color:var(--cyan);box-shadow:0 0 0 2px #00eaff18}
+textarea{min-height:130px;resize:vertical;line-height:1.6}
+.row{display:flex;flex-wrap:wrap;gap:9px;width:100%}
+.row>*{flex:1 1 130px;min-width:0}
+.btn{
+    min-height:44px;padding:11px 13px;border:1px solid #344768;
+    border-radius:10px;background:#202c46;color:white;
+    font-size:14px;font-weight:800;overflow-wrap:anywhere;transition:filter .2s;
+}
+.btn:hover{filter:brightness(1.15)}
+.btn:active{transform:scale(.98)}
+.btn-add,.btn-primary{border-color:var(--cyan);background:var(--cyan);color:#06121d}
+.btn-purple{border-color:#7752c8;background:#392767}
+.btn-danger{border-color:#87364e;background:#3c1b2b;color:#ff8ba2}
+.btn-green{border-color:#247c62;background:#12382f;color:#72ffbd}
+.mode-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.mode{
+    min-width:0;min-height:44px;padding:9px 2px;
+    border:1px solid #30405f;border-radius:10px;
+    background:#0d1527;color:#b8c5dc;font-size:clamp(11px,1.8vw,14px);font-weight:900;
+}
+.mode.active{border-color:var(--cyan);background:#07303a;color:var(--cyan)}
+.hint,.note-status{margin-top:10px;color:var(--muted);font-size:12px;line-height:1.6}
+.player-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:12px}
+.counter{color:var(--muted);font-size:12px}
+.player-list{display:grid;gap:8px}
+.player-item{display:flex;align-items:center;gap:10px;min-width:0;padding:10px 12px;border:1px solid #293954;border-radius:9px;background:#0e1526}
+.player-number{flex-shrink:0;color:var(--cyan);font-weight:bold}
+.player-name{flex:1;min-width:0;overflow-wrap:anywhere;word-break:break-word}
+.remove{flex-shrink:0;min-width:40px;min-height:40px;padding:5px;border:0;background:transparent;color:#ff8097;font-size:22px}
+.empty{padding:20px 8px;color:#71809d;text-align:center;font-size:13px}
+.results-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.team{min-width:0;overflow:hidden;border:1px solid #30405f;border-radius:13px;background:#0c1425}
+.team-title{padding:13px 8px;font-weight:900;text-align:center;overflow-wrap:anywhere}
+.team-a .team-title{background:#10333d;color:#66f2ff}
+.team-b .team-title{background:#2a2047;color:#c2a6ff}
+.team-members{display:grid;gap:8px;padding:10px}
+.member{min-width:0;padding:10px;border-radius:8px;background:#18233a;overflow-wrap:anywhere;word-break:break-word}
+.result-empty{padding:25px 10px;border:1px dashed #30405f;border-radius:12px;color:#8190ad;text-align:center;font-size:13px}
+.history-list{display:grid;gap:10px}
+.history-item{min-width:0;padding:13px;border:1px solid #293954;border-radius:10px;background:#0d1526}
+.history-head{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:9px}
+.history-date{color:var(--muted);font-size:11px}
+.history-content{font-size:13px;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word}
+.history-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.history-actions button{flex:1 1 110px;min-width:0}
+#randomBtn{min-height:50px;white-space:normal}
+#noteInput{min-height:180px}
+footer{padding:15px 0 25px;color:#63718c;font-size:12px;text-align:center;overflow-wrap:anywhere}
+@media(max-width:800px){
+    .layout{grid-template-columns:minmax(0,1fr);gap:0}
+    .full{grid-column:auto}
+    .card{border-radius:14px}
+    .row>*{flex:1 1 140px}
+}
+@media(max-width:480px){
+    body{padding:10px;font-size:15px}
+    header{padding:12px 0 20px}
+    .card{padding:13px;margin-bottom:12px}
+    .heading{margin-bottom:13px}
+    .row{gap:8px}
+    .row>*{flex:1 1 100%}
+    .mode-grid{gap:6px}
+    .mode{min-height:42px;font-size:12px}
+    .results-grid{gap:7px}
+    .team-title{font-size:12px}
+    .team-members{padding:7px;gap:6px}
+    .member{padding:9px 7px;font-size:13px}
+    .history-item{padding:10px}
+    .history-content{font-size:12px}
+    .player-item{padding:8px}
+    #noteInput{min-height:150px}
+    footer{padding-bottom:15px}
+}
+@media(max-width:350px){
+    body{padding:7px}
+    .card{padding:10px}
+    .mode-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .results-grid{grid-template-columns:minmax(0,1fr)}
+    .logo{font-size:24px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+    <div class="logo">vGIAU STORE</div>
+    <div class="subtitle">RANDOM TEAM • CHIA ĐỘI NGẪU NHIÊN</div>
+</header>
+
+<div class="layout">
+<section class="card">
+    <div class="heading">01 / CHỌN CHẾ ĐỘ</div>
+    <div class="mode-grid">
+        <button class="mode active" data-size="1">1VS1</button>
+        <button class="mode" data-size="2">2VS2</button>
+        <button class="mode" data-size="3">3VS3</button>
+        <button class="mode" data-size="4">4VS4</button>
+    </div>
+    <div class="hint">Chọn số người mỗi đội. Ví dụ 4VS4 cần tối thiểu 8 người.</div>
+</section>
+
+<section class="card">
+    <div class="heading">02 / THÊM NGƯỜI CHƠI</div>
+    <label class="label" for="singleName">Tên người chơi</label>
+    <div class="row">
+        <input id="singleName" placeholder="Nhập tên người chơi..." maxlength="60">
+        <button class="btn btn-add" id="addBtn">＋ THÊM NGƯỜI</button>
+    </div>
+    <label class="label" for="names">Nhập nhiều tên, mỗi dòng một người</label>
+    <textarea id="names" placeholder="Nhập danh sách người chơi..." style="min-height:120px"></textarea>
+    <div class="row" style="margin-top:10px">
+        <button class="btn btn-primary" id="importBtn">THÊM DANH SÁCH</button>
+        <button class="btn" id="shuffleBtn">TRỘN DANH SÁCH</button>
+    </div>
+    <div class="row" style="margin-top:10px">
+        <button class="btn btn-danger" id="clearNamesBtn">XÓA TẤT CẢ NGƯỜI</button>
+    </div>
+</section>
+
+<section class="card full">
+    <div class="player-top">
+        <div class="heading" style="margin:0">DANH SÁCH NGƯỜI CHƠI</div>
+        <div class="counter" id="count">0 người</div>
+    </div>
+    <div id="playerList" class="player-list"></div>
+</section>
+
+<section class="card full">
+    <div class="heading">03 / RANDOM TEAM</div>
+    <button class="btn btn-primary" id="randomBtn" style="width:100%;padding:16px;font-size:16px">⚡ CHIA ĐỘI NGẪU NHIÊN</button>
+    <div class="hint">Tên người chơi được trộn ngẫu nhiên trước khi chia đội.</div>
+</section>
+
+<section class="card full" id="results">
+    <div class="heading">KẾT QUẢ CHIA ĐỘI</div>
+    <div class="result-empty">Kết quả sẽ xuất hiện tại đây sau khi random.</div>
+</section>
+
+<div class="full" id="resultActions" style="display:none;margin-bottom:18px">
+    <div class="row">
+        <button class="btn btn-green" id="copyBtn">SAO CHÉP KẾT QUẢ</button>
+        <button class="btn btn-purple" id="againBtn">CHIA LẠI</button>
+    </div>
+</div>
+
+<section class="card full">
+    <div class="player-top">
+        <div class="heading" style="margin:0">04 / LỊCH SỬ RANDOM</div>
+        <button class="btn btn-danger" id="clearHistoryBtn">XÓA LỊCH SỬ</button>
+    </div>
+    <div id="history" class="history-list"></div>
+</section>
+
+<section class="card full" id="notesSection">
+    <div class="heading">05 / GHI CHÚ</div>
+    <textarea id="noteInput" placeholder="Nhập ghi chú của bạn tại đây..."></textarea>
+    <div class="row" style="margin-top:12px">
+        <button class="btn btn-add" id="saveNoteBtn">LƯU GHI CHÚ</button>
+        <button class="btn" id="editNoteBtn">SỬA GHI CHÚ</button>
+        <button class="btn btn-danger" id="deleteNoteBtn">XÓA GHI CHÚ</button>
+    </div>
+    <div class="note-status" id="noteStatus">Ghi chú được lưu trên trình duyệt hiện tại.</div>
+</section>
+</div>
+<footer>vGiau Store • RANDOM TEAM • 2026</footer>
+</div>
+
+<script>
+const PLAYER_KEY = "vgiau_players_v3";
+const HISTORY_KEY = "vgiau_history_v3";
+const NOTE_KEY = "vgiau_note_v3";
+
+const $ = id => document.getElementById(id);
+let players = loadData(PLAYER_KEY, []);
+if (!Array.isArray(players)) players = [];
+players = players.filter(name => typeof name === "string");
+let teamSize = 1;
+let currentResult = null;
+
+function loadData(key, fallback) {
+    try {
+        const value = localStorage.getItem(key);
+        return value === null ? fallback : JSON.parse(value);
+    } catch {
+        return fallback;
+    }
+}
+
+function saveData(key, value) {
+    try {
+        localStorage.setItem(key, JSON.stringify(value));
+        return true;
+    } catch {
+        return false;
+    }
+}
+
+function renderPlayers() {
+    const list = $("playerList");
+    list.replaceChildren();
+    $("count").textContent = players.length + " người";
+
+    if (!players.length) {
+        const empty = document.createElement("div");
+        empty.className = "empty";
+        empty.textContent = "Chưa có người chơi. Hãy thêm tên vào danh sách.";
+        list.appendChild(empty);
+        return;
+    }
+
+    players.forEach((name, index) => {
+        const item = document.createElement("div");
+        item.className = "player-item";
+
+        const number = document.createElement("span");
+        number.className = "player-number";
+        number.textContent = String(index + 1).padStart(2, "0");
+
+        const label = document.createElement("span");
+        label.className = "player-name";
+        label.textContent = name;
+
+        const remove = document.createElement("button");
+        remove.className = "remove";
+        remove.type = "button";
+        remove.textContent = "×";
+        remove.setAttribute("aria-label", "Xóa " + name);
+        remove.addEventListener("click", () => {
+            players.splice(index, 1);
+            saveData(PLAYER_KEY, players);
+            renderPlayers();
+        });
+
+        item.append(number, label, remove);
+        list.appendChild(item);
+    });
+}
+
+function addPlayer(name) {
+    name = name.trim();
+    if (!name) return;
+    if (players.some(p => p.toLowerCase() === name.toLowerCase())) {
+        alert("Tên này đã có trong danh sách.");
+        return;
+    }
+    players.push(name);
+    saveData(PLAYER_KEY, players);
+    renderPlayers();
+}
+
+$("addBtn").addEventListener("click", () => {
+    addPlayer($("singleName").value);
+    $("singleName").value = "";
+    $("singleName").focus();
+});
+
+$("singleName").addEventListener("keydown", event => {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        $("addBtn").click();
+    }
+});
+
+$("importBtn").addEventListener("click", () => {
+    const incoming = $("names").value.split(/\r?\n/).map(n => n.trim()).filter(Boolean);
+    let added = 0;
+
+    incoming.forEach(name => {
+        if (!players.some(p => p.toLowerCase() === name.toLowerCase())) {
+            players.push(name);
+            added++;
+        }
+    });
+
+    $("names").value = "";
+    saveData(PLAYER_KEY, players);
+    renderPlayers();
+    alert("Đã thêm " + added + " người chơi.");
+});
+
+function randomInt(max) {
+    if (max <= 1) return 0;
+    if (window.crypto && window.crypto.getRandomValues) {
+        const range = 4294967296;
+        const limit = Math.floor(range / max) * max;
+        const buffer = new Uint32Array(1);
+        let value;
+        do {
+            window.crypto.getRandomValues(buffer);
+            value = buffer[0];
+        } while (value >= limit);
+        return value % max;
+    }
+    return Math.floor(Math.random() * max);
+}
+
+function shuffleArray(array) {
+    const copy = [...array];
+    for (let i = copy.length - 1; i > 0; i--) {
+        const j = randomInt(i + 1);
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+}
+
+$("shuffleBtn").addEventListener("click", () => {
+    if (players.length < 2) {
+        alert("Cần ít nhất 2 người để trộn danh sách.");
+        return;
+    }
+    players = shuffleArray(players);
+    saveData(PLAYER_KEY, players);
+    renderPlayers();
+});
+
+$("clearNamesBtn").addEventListener("click", () => {
+    if (!players.length) return;
+    if (!confirm("Bạn có chắc muốn xóa toàn bộ người chơi?")) return;
+    players = [];
+    saveData(PLAYER_KEY, players);
+    renderPlayers();
+});
+
+document.querySelectorAll(".mode").forEach(button => {
+    button.addEventListener("click", () => {
+        teamSize = Number(button.dataset.size);
+        document.querySelectorAll(".mode").forEach(b => b.classList.remove("active"));
+        button.classList.add("active");
+    });
+});
+
+function makeResultText(result) {
+    return result.mode + "\n\nĐỘI A\n" +
+        result.teamA.map((n, i) => (i + 1) + ". " + n).join("\n") +
+        "\n\nĐỘI B\n" +
+        result.teamB.map((n, i) => (i + 1) + ". " + n).join("\n");
+}
+
+function renderResult(result) {
+    $("results").replaceChildren();
+
+    const heading = document.createElement("div");
+    heading.className = "heading";
+    heading.textContent = "KẾT QUẢ CHIA ĐỘI";
+
+    const grid = document.createElement("div");
+    grid.className = "results-grid";
+
+    [
+        {title:"ĐỘI A",members:result.teamA,cls:"team-a"},
+        {title:"ĐỘI B",members:result.teamB,cls:"team-b"}
+    ].forEach(team => {
+        const box = document.createElement("div");
+        box.className = "team " + team.cls;
+
+        const title = document.createElement("div");
+        title.className = "team-title";
+        title.textContent = team.title;
+
+        const members = document.createElement("div");
+        members.className = "team-members";
+
+        team.members.forEach((name, index) => {
+            const member = document.createElement("div");
+            member.className = "member";
+            member.textContent = (index + 1) + ". " + name;
+            members.appendChild(member);
+        });
+
+        box.append(title, members);
+        grid.appendChild(box);
+    });
+
+    $("results").append(heading, grid);
+    $("resultActions").style.display = "block";
+}
+
+function getHistory() {
+    const history = loadData(HISTORY_KEY, []);
+    return Array.isArray(history) ? history : [];
+}
+
+function addHistory(result) {
+    const history = getHistory();
+    history.unshift({
+        date: new Date().toLocaleString("vi-VN"),
+        result
+    });
+    saveData(HISTORY_KEY, history.slice(0, 50));
+    renderHistory();
+}
+
+function renderHistory() {
+    const box = $("history");
+    box.replaceChildren();
+    const history = getHistory();
+
+    if (!history.length) {
+        const empty = document.createElement("div");
+        empty.className = "empty";
+        empty.textContent = "Chưa có lịch sử random.";
+        box.appendChild(empty);
+        return;
+    }
+
+    history.forEach(entry => {
+        const item = document.createElement("div");
+        item.className = "history-item";
+
+        const head = document.createElement("div");
+        head.className = "history-head";
+
+        const mode = document.createElement("strong");
+        mode.textContent = entry.result.mode;
+
+        const date = document.createElement("span");
+        date.className = "history-date";
+        date.textContent = entry.date;
+
+        head.append(mode, date);
+
+        const content = document.createElement("div");
+        content.className = "history-content";
+        content.textContent = makeResultText(entry.result);
+
+        const actions = document.createElement("div");
+        actions.className = "history-actions";
+
+        const view = document.createElement("button");
+        view.className = "btn";
+        view.textContent = "XEM LẠI";
+        view.addEventListener("click", () => {
+            currentResult = entry.result;
+            renderResult(currentResult);
+            $("results").scrollIntoView({behavior:"smooth",block:"start"});
+        });
+
+        const copy = document.createElement("button");
+        copy.className = "btn btn-purple";
+        copy.textContent = "SAO CHÉP";
+        copy.addEventListener("click", () => copyText(makeResultText(entry.result)));
+
+        actions.append(view, copy);
+        item.append(head, content, actions);
+        box.appendChild(item);
+    });
+}
+
+$("randomBtn").addEventListener("click", () => {
+    const required = teamSize * 2;
+
+    if (players.length < required) {
+        alert("Chế độ " + teamSize + "VS" + teamSize +
+            " cần ít nhất " + required + " người. Hiện có " + players.length + " người.");
+        return;
+    }
+
+    let pool = [...players];
+
+    if (pool.length > required) {
+        const useAll = confirm(
+            "Hiện có " + pool.length + " người, chế độ " +
+            teamSize + "VS" + teamSize + " cần " + required +
+            " người.\n\nBấm OK để chia toàn bộ nếu số người chẵn.\n" +
+            "Bấm Hủy để random đúng " + required + " người."
+        );
+
+        if (!useAll) {
+            pool = shuffleArray(pool).slice(0, required);
+        } else if (pool.length % 2 !== 0) {
+            alert("Tổng số người là số lẻ, không thể chia toàn bộ thành hai đội bằng nhau. Hãy xóa một người hoặc bấm Hủy để random đúng số người theo chế độ.");
+            return;
+        }
+    }
+
+    pool = shuffleArray(pool);
+    const half = pool.length / 2;
+
+    currentResult = {
+        mode: (pool.length / 2) + "VS" + (pool.length / 2),
+        teamA: pool.slice(0, half),
+        teamB: pool.slice(half)
+    };
+
+    renderResult(currentResult);
+    addHistory(currentResult);
+});
+
+$("copyBtn").addEventListener("click", () => {
+    if (currentResult) copyText(makeResultText(currentResult));
+});
+
+$("againBtn").addEventListener("click", () => $("randomBtn").click());
+
+async function copyText(text) {
+    try {
+        if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(text);
+        } else {
+            const temp = document.createElement("textarea");
+            temp.value = text;
+            temp.style.position = "fixed";
+            temp.style.opacity = "0";
+            document.body.appendChild(temp);
+            temp.select();
+            const success = document.execCommand("copy");
+            temp.remove();
+            if (!success) throw new Error("Copy failed");
+        }
+        alert("Đã sao chép kết quả!");
+    } catch {
+        alert("Không thể sao chép tự động. Hãy thử mở web bằng HTTPS.");
+    }
+}
+
+$("clearHistoryBtn").addEventListener("click", () => {
+    if (!confirm("Bạn có chắc muốn xóa toàn bộ lịch sử?")) return;
+    saveData(HISTORY_KEY, []);
+    renderHistory();
+});
+
+try {
+    $("noteInput").value = localStorage.getItem(NOTE_KEY) || "";
+} catch {
+    $("noteStatus").textContent = "Trình duyệt không hỗ trợ lưu ghi chú.";
+}
+
+$("saveNoteBtn").addEventListener("click", () => {
+    try {
+        localStorage.setItem(NOTE_KEY, $("noteInput").value);
+        $("noteStatus").textContent = "Đã lưu ghi chú thành công!";
+    } catch {
+        $("noteStatus").textContent = "Không thể lưu ghi chú trên trình duyệt này.";
+    }
+});
+
+$("editNoteBtn").addEventListener("click", () => {
+    $("noteInput").focus();
+    const length = $("noteInput").value.length;
+    $("noteInput").setSelectionRange(length, length);
+    $("noteStatus").textContent = "Hãy sửa nội dung rồi bấm LƯU GHI CHÚ.";
+});
+
+$("deleteNoteBtn").addEventListener("click", () => {
+    if (!confirm("Bạn có chắc chắn muốn xóa ghi chú?")) return;
+    try {
+        localStorage.removeItem(NOTE_KEY);
+        $("noteInput").value = "";
+        $("noteStatus").textContent = "Đã xóa ghi chú.";
+    } catch {
+        $("noteStatus").textContent = "Không thể xóa ghi chú.";
+    }
+});
+
+renderPlayers();
+renderHistory();
+</script>
+</body>
+</html>
